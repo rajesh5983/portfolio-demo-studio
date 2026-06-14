@@ -1,0 +1,23 @@
+# Base schema for a project demo script.
+# Copy this file to projects/<project>/script.yaml and fill in the values,
+# or generate it automatically with engine/generate_script.py.
+
+title: "Project Demo Title"
+project: "project-slug"
+duration_target_seconds: 300  # 300 = 5 minutes
+
+segments:
+  - id: 1
+    label: "intro"
+    recording_file: "01_intro.mp4"
+    duration_seconds: 30
+    narration: >
+      Narration text for this segment goes here. This is what the
+      text-to-speech engine will read aloud over the matching recording.
+
+  - id: 2
+    label: "feature_demo"
+    recording_file: "02_feature_demo.mp4"
+    duration_seconds: 60
+    narration: >
+      Narration text for the second segment goes here.

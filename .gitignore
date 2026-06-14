@@ -1,0 +1,34 @@
+# Video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Audio files
+*.mp3
+*.wav
+*.m4a
+
+# OBS recordings and generated audio (directory structure kept via .gitkeep)
+projects/*/assets/recordings/*
+projects/*/assets/audio/*
+
+# Output folder contents (folder kept via .gitkeep)
+output/*
+
+# Environment
+.env
+__pycache__/
+*.pyc
+.DS_Store
+*.egg-info
+dist/
+build/
+
+# Virtual environment
+.venv/
+
+# Keep .gitkeep files tracked despite the rules above
+!.gitkeep
+!**/.gitkeep

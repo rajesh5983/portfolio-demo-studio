@@ -1,0 +1,95 @@
+title: "WorkerShield — Agentic RAG for Australian Workplace Compliance"
+project: "workershield"
+duration_target_seconds: 300  # 300 = 5 minutes
+
+segments:
+  - id: 1
+    label: "intro"
+    recording_file: "01_intro.mp4"
+    duration_seconds: 30
+    narration: >
+      WorkerShield is an agentic RAG system built to help Australian workers
+      and employers navigate workplace compliance across three domains: shift
+      work and fatigue, workplace rights, and health and safety. Under the
+      hood, three specialist agents — SafeShift, FairDesk, and HealthNav —
+      work together through a LangGraph orchestration layer, backed by a
+      Qdrant vector store and local Ollama models, all wrapped in a simple
+      Gradio interface.
+
+  - id: 2
+    label: "safeshift_demo"
+    recording_file: "02_safeshift.mp4"
+    duration_seconds: 60
+    narration: >
+      Let's start with SafeShift, the agent focused on shift work and fatigue
+      management. SafeShift draws on the Fair Work Act, modern awards, and
+      fatigue management codes of practice to answer questions about minimum
+      rest breaks, maximum consecutive shifts, and fatigue risk thresholds for
+      safety-critical roles. Here, I'll ask SafeShift a real-world question:
+      "I'm rostered for four night shifts in a row with only eight hours
+      between them — is that compliant?" SafeShift retrieves the relevant
+      clauses from its Qdrant knowledge base, reasons over the specific award
+      conditions, and returns a clear, cited answer — flagging that the rest
+      period falls below the recommended minimum and pointing to the exact
+      clause in the award. This kind of grounded, citation-backed response is
+      what sets the agentic RAG approach apart from a generic chatbot.
+
+  - id: 3
+    label: "fairdesk_demo"
+    recording_file: "03_fairdesk.mp4"
+    duration_seconds: 60
+    narration: >
+      Next is FairDesk, which handles general workplace rights — things like
+      unfair dismissal, underpayment, leave entitlements, and discrimination.
+      I'll ask FairDesk: "My employer hasn't paid my annual leave loading —
+      what are my options?" FairDesk searches across the National Employment
+      Standards and relevant Fair Work Commission guidance, identifies that
+      annual leave loading is a common entitlement issue, and walks through
+      the practical next steps — checking the applicable award or agreement,
+      raising it directly with the employer, and, if unresolved, lodging a
+      dispute with the Fair Work Ombudsman. Notice how the response stays
+      grounded in actual legislation rather than generic advice, and includes
+      direct references the user can follow up on themselves.
+
+  - id: 4
+    label: "healthnav_demo"
+    recording_file: "04_healthnav.mp4"
+    duration_seconds: 60
+    narration: >
+      The third agent, HealthNav, focuses on workplace health and safety —
+      navigating WHS legislation, codes of practice, and incident reporting
+      obligations across Australian states and territories. I'll ask
+      HealthNav: "A worker was injured using a forklift without proper
+      certification — what are the employer's reporting obligations?"
+      HealthNav identifies this as a notifiable incident under the model WHS
+      Act, explains the timeframes for notifying the regulator, and outlines
+      the duty to preserve the incident site for investigation. Because WHS
+      rules vary slightly by jurisdiction, HealthNav is also able to flag
+      state-specific differences — for example, between SafeWork NSW and
+      WorkSafe Victoria — giving the user a starting point for jurisdiction-
+      specific follow-up.
+
+  - id: 5
+    label: "wrap_architecture"
+    recording_file: "05_wrap.mp4"
+    duration_seconds: 90
+    narration: >
+      So that's WorkerShield — three specialist agents covering shift work
+      and fatigue, workplace rights, and health and safety, all working from
+      the same underlying architecture. Every query first passes through a
+      routing layer powered by Claude Haiku, which classifies the question
+      and decides whether it belongs to SafeShift, FairDesk, or HealthNav —
+      or whether it needs input from more than one. Each agent retrieves
+      grounded context from its own collection in a Qdrant vector database,
+      built from Australian legislation, awards, and codes of practice. For
+      the heavy lifting — reasoning over retrieved clauses and drafting the
+      agent's response — WorkerShield uses local Ollama models, keeping the
+      core retrieval and reasoning pipeline private and cost-free to run.
+      When a query spans multiple domains, or needs a polished final answer,
+      Claude Sonnet synthesizes the individual agent responses into a single,
+      coherent reply. The whole system is exposed through a Gradio interface
+      on port 7860, so anyone can ask a question in plain English and get a
+      grounded, cited answer in seconds. WorkerShield shows how an agentic RAG
+      architecture — small specialist agents, a smart router, and a capable
+      synthesizer — can make complex regulatory domains genuinely accessible.
+      Thanks for watching.

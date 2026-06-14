@@ -1,0 +1,8 @@
+# ElevenLabs text-to-speech configuration
+# Replace voice_id with a real ElevenLabs voice ID before running generate_audio.py
+voice_id: "PLACEHOLDER_VOICE_ID"
+model: "eleven_multilingual_v2"
+stability: 0.5
+similarity_boost: 0.75
+speed: 1.0
+output_format: "mp3_44100_128"
