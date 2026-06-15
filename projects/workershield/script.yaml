@@ -1,95 +1,80 @@
 title: "WorkerShield — Agentic RAG for Australian Workplace Compliance"
 project: "workershield"
-duration_target_seconds: 300  # 300 = 5 minutes
+duration_target_seconds: 380  # 380 = ~6.5 min
 
 segments:
   - id: 1
     label: "intro"
     recording_file: "01_intro.mp4"
-    duration_seconds: 30
+    duration_seconds: 40
     narration: >
-      WorkerShield is an agentic RAG system built to help Australian workers
-      and employers navigate workplace compliance across three domains: shift
-      work and fatigue, workplace rights, and health and safety. Under the
-      hood, three specialist agents — SafeShift, FairDesk, and HealthNav —
-      work together through a LangGraph orchestration layer, backed by a
-      Qdrant vector store and local Ollama models, all wrapped in a simple
-      Gradio interface.
+      WorkerShield is a production-grade agentic RAG system for Australian
+      workplace compliance. Three specialist agents, one unified interface.
+      Built on LangGraph, Qdrant, and Claude.
 
   - id: 2
     label: "safeshift_demo"
     recording_file: "02_safeshift.mp4"
-    duration_seconds: 60
+    duration_seconds: 50
     narration: >
-      Let's start with SafeShift, the agent focused on shift work and fatigue
-      management. SafeShift draws on the Fair Work Act, modern awards, and
-      fatigue management codes of practice to answer questions about minimum
-      rest breaks, maximum consecutive shifts, and fatigue risk thresholds for
-      safety-critical roles. Here, I'll ask SafeShift a real-world question:
-      "I'm rostered for four night shifts in a row with only eight hours
-      between them — is that compliant?" SafeShift retrieves the relevant
-      clauses from its Qdrant knowledge base, reasons over the specific award
-      conditions, and returns a clear, cited answer — flagging that the rest
-      period falls below the recommended minimum and pointing to the exact
-      clause in the award. This kind of grounded, citation-backed response is
-      what sets the agentic RAG approach apart from a generic chatbot.
+      A FIFO worker query spanning WHS duty of care and flexible working
+      rights. Watch the router activate SafeShift and FairDesk
+      simultaneously — then synthesise a cited response from both domains.
 
   - id: 3
     label: "fairdesk_demo"
     recording_file: "03_fairdesk.mp4"
-    duration_seconds: 60
+    duration_seconds: 50
     narration: >
-      Next is FairDesk, which handles general workplace rights — things like
-      unfair dismissal, underpayment, leave entitlements, and discrimination.
-      I'll ask FairDesk: "My employer hasn't paid my annual leave loading —
-      what are my options?" FairDesk searches across the National Employment
-      Standards and relevant Fair Work Commission guidance, identifies that
-      annual leave loading is a common entitlement issue, and walks through
-      the practical next steps — checking the applicable award or agreement,
-      raising it directly with the employer, and, if unresolved, lodging a
-      dispute with the Fair Work Ombudsman. Notice how the response stays
-      grounded in actual legislation rather than generic advice, and includes
-      direct references the user can follow up on themselves.
+      Casual employee overtime on public holidays. FairDesk retrieves the
+      relevant Fair Work Act provisions and surfaces the exact penalty rate
+      obligations with source citations.
 
   - id: 4
     label: "healthnav_demo"
     recording_file: "04_healthnav.mp4"
-    duration_seconds: 60
+    duration_seconds: 50
     narration: >
-      The third agent, HealthNav, focuses on workplace health and safety —
-      navigating WHS legislation, codes of practice, and incident reporting
-      obligations across Australian states and territories. I'll ask
-      HealthNav: "A worker was injured using a forklift without proper
-      certification — what are the employer's reporting obligations?"
-      HealthNav identifies this as a notifiable incident under the model WHS
-      Act, explains the timeframes for notifying the regulator, and outlines
-      the duty to preserve the incident site for investigation. Because WHS
-      rules vary slightly by jurisdiction, HealthNav is also able to flag
-      state-specific differences — for example, between SafeWork NSW and
-      WorkSafe Victoria — giving the user a starting point for jurisdiction-
-      specific follow-up.
+      Psychosocial hazards — one of the most complex areas of modern WHS
+      law. HealthNav pulls the WHS Act obligations and synthesises
+      actionable guidance.
 
   - id: 5
-    label: "wrap_architecture"
-    recording_file: "05_wrap.mp4"
-    duration_seconds: 90
+    label: "qdrant_demo"
+    recording_file: "05_qdrant.mp4"
+    duration_seconds: 40
     narration: >
-      So that's WorkerShield — three specialist agents covering shift work
-      and fatigue, workplace rights, and health and safety, all working from
-      the same underlying architecture. Every query first passes through a
-      routing layer powered by Claude Haiku, which classifies the question
-      and decides whether it belongs to SafeShift, FairDesk, or HealthNav —
-      or whether it needs input from more than one. Each agent retrieves
-      grounded context from its own collection in a Qdrant vector database,
-      built from Australian legislation, awards, and codes of practice. For
-      the heavy lifting — reasoning over retrieved clauses and drafting the
-      agent's response — WorkerShield uses local Ollama models, keeping the
-      core retrieval and reasoning pipeline private and cost-free to run.
-      When a query spans multiple domains, or needs a polished final answer,
-      Claude Sonnet synthesizes the individual agent responses into a single,
-      coherent reply. The whole system is exposed through a Gradio interface
-      on port 7860, so anyone can ask a question in plain English and get a
-      grounded, cited answer in seconds. WorkerShield shows how an agentic RAG
-      architecture — small specialist agents, a smart router, and a capable
-      synthesizer — can make complex regulatory domains genuinely accessible.
-      Thanks for watching.
+      1,270 vectors across two index types — dense cosine for semantic
+      search, sparse BM25 for keyword precision. Hybrid retrieval with RRF
+      fusion runs on every query.
+
+  - id: 6
+    label: "phoenix_demo"
+    recording_file: "06_phoenix.mp4"
+    duration_seconds: 50
+    narration: >
+      Every query is traced end-to-end through Phoenix. Router, retrieval,
+      reranker, synthesis — the full LangGraph execution chain, visible
+      trace by trace.
+
+  - id: 7
+    label: "ragas_demo"
+    recording_file: "07_ragas.mp4"
+    duration_seconds: 45
+    narration: >
+      RAGAS evaluation across three retrieval configurations — dense-only,
+      hybrid RRF, and hybrid with reranking. The reranked hybrid wins on
+      context precision and faithfulness, the configuration that ships to
+      production.
+
+  - id: 8
+    label: "mcp_wrap_demo"
+    recording_file: "08_mcp_wrap.mp4"
+    duration_seconds: 55
+    narration: >
+      The killer query. WorkerShield fires three nodes in parallel —
+      SafeShift for fatigue obligations, HealthNav for WHS duties, and
+      incident_check_node which calls the MCP server directly. The response
+      combines live incident statistics from your internal database with
+      document-grounded compliance obligations. This is RAG plus MCP tool
+      use in a single LangGraph execution.

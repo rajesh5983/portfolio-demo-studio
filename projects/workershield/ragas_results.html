@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkerShield — RAGAS Evaluation Results</title>
+<style>
+  :root {
+    --bg: #14142b;
+    --panel: #1f1f3d;
+    --panel-border: #34345e;
+    --text: #e8e8f5;
+    --text-dim: #9a9ac0;
+    --accent: #8c63ff;
+    --accent2: #4ea1ff;
+    --cyan: #5ff0e0;
+    --green: #2ecc71;
+    --green-bg: rgba(46, 204, 113, 0.16);
+    --green-glow: rgba(46, 204, 113, 0.55);
+    --amber: #f5b942;
+    --amber-bg: rgba(245, 185, 66, 0.16);
+    --amber-glow: rgba(245, 185, 66, 0.55);
+    --red: #ff5c5c;
+    --red-bg: rgba(255, 92, 92, 0.16);
+    --red-glow: rgba(255, 92, 92, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { margin: 0; }
+
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 24px 16px;
+  }
+
+  .top-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--cyan), var(--accent));
+    background-size: 300% 100%;
+    animation: shimmer 3s linear infinite;
+    z-index: 10;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 0% 0; }
+    100% { background-position: 300% 0; }
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  header { margin: 0 0 16px; }
+
+  h1 {
+    font-size: 22px;
+    margin: 0 0 4px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #b3a4ff, #6c63ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle { font-size: 13px; color: var(--text-dim); opacity: 0.7; margin: 0; }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 0 0 16px;
+  }
+
+  .card:last-child { margin-bottom: 0; }
+
+  .card h2 {
+    margin: 0 0 8px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .interpretation h2 { font-size: 15px; }
+  .metrics-section h2 { font-size: 14px; }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr {
+    background: linear-gradient(90deg, #2c1f55, #1c2e5e);
+  }
+
+  th {
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  th:first-child { border-radius: 6px 0 0 6px; }
+  th:last-child { border-radius: 0 6px 6px 0; }
+
+  td {
+    padding: 14px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--panel-border);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .config-name { font-size: 15px; font-weight: 600; }
+
+  tr.recommended { background: rgba(108, 99, 255, 0.12); }
+
+  tr.recommended td:first-child {
+    position: relative;
+    padding-left: 22px;
+  }
+
+  tr.recommended td:first-child::before {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2), var(--cyan));
+    animation: edge-glow 2.4s ease-in-out infinite;
+  }
+
+  @keyframes edge-glow {
+    0%, 100% { box-shadow: 0 0 4px var(--accent); opacity: 0.7; }
+    50% { box-shadow: 0 0 10px var(--cyan); opacity: 1; }
+  }
+
+  .badge {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    animation: pulse-badge 1.8s ease-in-out infinite;
+  }
+
+  @keyframes pulse-badge {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .score {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .score-green { background: var(--green-bg); color: var(--green); box-shadow: inset 0 0 8px var(--green-glow); }
+  .score-amber { background: var(--amber-bg); color: var(--amber); box-shadow: inset 0 0 8px var(--amber-glow); }
+  .score-red { background: var(--red-bg); color: var(--red); box-shadow: inset 0 0 8px var(--red-glow); }
+
+  .legend {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot-green { background: var(--green); box-shadow: 0 0 6px var(--green-glow); }
+  .dot-amber { background: var(--amber); box-shadow: 0 0 6px var(--amber-glow); }
+  .dot-red { background: var(--red); box-shadow: 0 0 6px var(--red-glow); }
+
+  .footnote {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid var(--panel-border);
+    color: var(--text-dim);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .interpretation { border-left: 3px solid var(--accent); }
+
+  .interpretation p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  .metric h3 {
+    margin: 0 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+
+  .metric p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+</style>
+</head>
+<body>
+  <div class="top-bar"></div>
+  <div class="container">
+    <header>
+      <h1>WorkerShield — RAGAS Evaluation Results</h1>
+      <p class="subtitle">Retrieval-Augmented Generation Assessment across 3 retrieval configs</p>
+    </header>
+
+    <section class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Config</th>
+            <th>Faithfulness</th>
+            <th>Context Precision</th>
+            <th>Context Recall</th>
+            <th>Answer Relevancy</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="config-name">dense_only</td>
+            <td><span class="score score-green">0.8938</span></td>
+            <td><span class="score score-amber">0.7500</span></td>
+            <td><span class="score score-amber">0.7500</span></td>
+            <td><span class="score score-red">0.6387</span></td>
+          </tr>
+          <tr>
+            <td class="config-name">hybrid_RRF</td>
+            <td><span class="score score-amber">0.6878</span></td>
+            <td><span class="score score-amber">0.7783</span></td>
+            <td><span class="score score-green">0.8750</span></td>
+            <td><span class="score score-red">0.5251</span></td>
+          </tr>
+          <tr class="recommended">
+            <td class="config-name">hybrid_reranked <span class="badge">Recommended</span></td>
+            <td><span class="score score-amber">0.7715</span></td>
+            <td><span class="score score-amber">0.7845</span></td>
+            <td><span class="score score-amber">0.7500</span></td>
+            <td><span class="score score-red">0.5288</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="legend">
+        <span><span class="dot dot-green"></span> &gt; 0.80</span>
+        <span><span class="dot dot-amber"></span> 0.65 – 0.80</span>
+        <span><span class="dot dot-red"></span> &lt; 0.65</span>
+      </div>
+
+      <p class="footnote">
+        Evaluated using the RAGAS framework with OpenAI as judge model.
+        Scores reflect a 5-question evaluation set across SafeShift,
+        FairDesk and HealthNav domains.
+      </p>
+    </section>
+
+    <section class="card interpretation">
+      <h2>Interpretation</h2>
+      <p>
+        <strong>hybrid_reranked</strong> achieves the best balance — highest
+        Context Precision (0.7845) with strong Faithfulness (0.7715). Reranking
+        the hybrid RRF candidates trades a little Context Recall for
+        meaningfully better precision and faithfulness — the right tradeoff for
+        a compliance assistant, where citing the right source matters more than
+        retrieving every possible source.
+      </p>
+    </section>
+
+    <section class="card metrics-section">
+      <h2>What These Metrics Mean</h2>
+      <div class="metrics-grid">
+        <div class="metric">
+          <h3>Faithfulness</h3>
+          <p>Does the answer stick to the retrieved context, or make things up?</p>
+        </div>
+        <div class="metric">
+          <h3>Context Precision</h3>
+          <p>How much of the retrieved context was actually relevant — less noise for the model.</p>
+        </div>
+        <div class="metric">
+          <h3>Context Recall</h3>
+          <p>Did retrieval find everything needed to fully answer the question?</p>
+        </div>
+        <div class="metric">
+          <h3>Answer Relevancy</h3>
+          <p>How directly the answer addresses the question that was actually asked.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

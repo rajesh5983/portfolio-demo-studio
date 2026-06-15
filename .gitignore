@@ -29,6 +29,9 @@ build/
 # Virtual environment
 .venv/
 
+# Dedicated Chrome profile used for CDP-driven demo recording
+.chrome-automation-profile/
+
 # Keep .gitkeep files tracked despite the rules above
 !.gitkeep
 !**/.gitkeep
