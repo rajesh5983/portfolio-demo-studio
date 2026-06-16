@@ -114,7 +114,10 @@ def main(project: str, dry_run: bool, segment: str | None) -> None:
         vo_script = _load_yaml(script_path)
         stem = script_path.stem.replace("_vo_script", "")
         all_cues = vo_script.get("cues", [])
-        approved = [c for c in all_cues if str(c.get("approved", "no")).strip().lower() == "yes"]
+        approved = [
+            c for c in all_cues
+            if c.get("approved") is True or str(c.get("approved", "")).strip().lower() == "yes"
+        ]
 
         if not approved:
             click.echo(

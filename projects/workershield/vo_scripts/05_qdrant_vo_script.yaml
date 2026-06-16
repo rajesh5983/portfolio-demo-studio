@@ -1,0 +1,18 @@
+segment: 05_qdrant
+total_duration: 39
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "Qdrant indexes 1,270 documents across two retrieval strategies running in parallel."
+    duration_est: 6
+    approved: yes
+  - timestamp: "00:06"
+    cue_type: post_lag
+    vo_text: "The collection has loaded with both dense cosine vectors for semantic similarity and sparse BM25 vectors for keyword precision."
+    duration_est: 7
+    approved: yes
+  - timestamp: "00:39"
+    cue_type: post_lag
+    vo_text: "Every query runs hybrid retrieval — results from both indexes are merged using Reciprocal Rank Fusion before anything is returned."
+    duration_est: 7
+    approved: yes

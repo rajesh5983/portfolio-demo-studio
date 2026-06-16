@@ -1,0 +1,13 @@
+segment: 07_ragas
+total_duration: 44
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "RAGAS evaluates three retrieval configurations — dense-only, hybrid RRF, and hybrid with reranking — to determine which performs best before anything ships."
+    duration_est: 10
+    approved: yes
+  - timestamp: "00:44"
+    cue_type: post_lag
+    vo_text: "Results are in — the reranked hybrid configuration leads on both context precision and faithfulness, so that's the one going to production."
+    duration_est: 8
+    approved: yes

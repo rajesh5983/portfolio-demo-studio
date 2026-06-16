@@ -1,0 +1,23 @@
+segment: 06_phoenix
+total_duration: 49
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "Phoenix traces every query end-to-end — from routing through to final synthesis."
+    duration_est: 6
+    approved: yes
+  - timestamp: "00:06"
+    cue_type: post_lag
+    vo_text: "The trace view is now loaded, showing the full LangGraph execution chain for a single query."
+    duration_est: 5
+    approved: yes
+  - timestamp: "00:12"
+    cue_type: post_lag
+    vo_text: "Each span maps to a step in the pipeline — router, retrieval, reranker, and synthesis — with timing and inputs visible at every stage."
+    duration_est: 7
+    approved: yes
+  - timestamp: "00:49"
+    cue_type: post_lag
+    vo_text: "That level of observability means issues in retrieval or ranking can be diagnosed directly, without guesswork."
+    duration_est: 6
+    approved: yes

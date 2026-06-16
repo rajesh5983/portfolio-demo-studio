@@ -1,0 +1,13 @@
+segment: 02_safeshift
+total_duration: 79
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "A FIFO worker is asking about shift safety obligations and their right to request flexible arrangements — a query that crosses two distinct legal domains simultaneously."
+    duration_est: 9
+    approved: yes
+  - timestamp: "01:19"
+    cue_type: post_lag
+    vo_text: "The router has activated both SafeShift and FairDesk in parallel, and is now synthesising a single cited response drawn from WHS duty of care and Fair Work flexible working provisions."
+    duration_est: 10
+    approved: yes

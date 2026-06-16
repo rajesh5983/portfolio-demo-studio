@@ -1,0 +1,18 @@
+segment: 01_intro
+total_duration: 39
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "WorkerShield handles Australian workplace compliance queries across three specialist domains — production-grade agentic RAG, orchestrated with LangGraph."
+    duration_est: 8
+    approved: yes
+  - timestamp: "00:29"
+    cue_type: post_lag
+    vo_text: "The interface has just initialised — three agents running under a single unified front end, orchestrated with LangGraph."
+    duration_est: 7
+    approved: yes
+  - timestamp: "00:39"
+    cue_type: post_lag
+    vo_text: "Qdrant handles all vector search — Claude provides the reasoning layer across every agent."
+    duration_est: 6
+    approved: yes

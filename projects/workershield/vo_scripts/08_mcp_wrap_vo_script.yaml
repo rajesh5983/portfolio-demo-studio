@@ -1,0 +1,13 @@
+segment: 08_mcp_wrap
+total_duration: 79
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "WorkerShield runs all three compliance nodes simultaneously — fatigue obligations, WHS duties, and a live incident lookup against your internal database."
+    duration_est: 9
+    approved: yes
+  - timestamp: "01:19"
+    cue_type: post_lag
+    vo_text: "The combined response merges document-grounded obligations with real incident statistics — RAG and MCP tool use resolved in a single LangGraph execution."
+    duration_est: 9
+    approved: yes

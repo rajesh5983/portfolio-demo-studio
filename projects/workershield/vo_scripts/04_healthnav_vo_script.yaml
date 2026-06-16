@@ -1,0 +1,13 @@
+segment: 04_healthnav
+total_duration: 49
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "HealthNav handles psychosocial hazard queries against the WHS Act and returns specific duties and actionable guidance."
+    duration_est: 9
+    approved: yes
+  - timestamp: "00:49"
+    cue_type: post_lag
+    vo_text: "That's the synthesised output — specific duties, practical steps, and the legislative basis, ready to work with."
+    duration_est: 7
+    approved: yes

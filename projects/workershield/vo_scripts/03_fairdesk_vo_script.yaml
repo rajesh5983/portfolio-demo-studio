@@ -1,0 +1,13 @@
+segment: 03_fairdesk
+total_duration: 58
+cues:
+  - timestamp: "00:00"
+    cue_type: intro
+    vo_text: "FairDesk takes a casual employee's overtime and public holiday query, pulls the applicable Fair Work Act provisions, and returns the exact penalty rate obligations with source citations."
+    duration_est: 11
+    approved: yes
+  - timestamp: "00:58"
+    cue_type: post_lag
+    vo_text: "Penalty rates are cited directly against the legislative source — the obligation is precise and unambiguous."
+    duration_est: 10
+    approved: yes
