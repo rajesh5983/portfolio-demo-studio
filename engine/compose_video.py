@@ -228,7 +228,14 @@ def concat_segments(segment_paths: list[Path], out_path: Path) -> None:
     default=False,
     help="Keep intermediate temp files instead of deleting them.",
 )
-def main(project: str, keep_temp: bool) -> None:
+@click.option(
+    "--segment",
+    "only_segment",
+    default=None,
+    help="Process only this segment ID (e.g. 03_fairdesk). Other segments are "
+         "taken from existing output; final video is still rebuilt.",
+)
+def main(project: str, keep_temp: bool, only_segment: str | None) -> None:
     _check_ffmpeg_available()
 
     script_path = REPO_ROOT / "projects" / project / "script.yaml"
@@ -251,6 +258,15 @@ def main(project: str, keep_temp: bool) -> None:
     segment_outputs: list[Path] = []
     for segment in script.get("segments", []):
         segment_id = Path(segment["recording_file"]).stem  # e.g. "01_intro"
+        seg_out = segments_dir / f"{segment_id}.mp4"
+
+        if only_segment and segment_id != only_segment:
+            if seg_out.exists():
+                segment_outputs.append(seg_out)
+            else:
+                click.echo(f"[{segment_id}] Skipped (no existing output — run without --segment to build it)")
+            continue
+
         video_path = recordings_dir / segment["recording_file"]
         vo_script_path = vo_scripts_dir / f"{segment_id}_vo_script.yaml"
 
@@ -273,7 +289,6 @@ def main(project: str, keep_temp: bool) -> None:
             segment_id, vo_script, audio_dir, video_duration, temp_dir
         )
 
-        seg_out = segments_dir / f"{segment_id}.mp4"
         click.echo(f"[{segment_id}] Merging audio onto video...")
         mix_audio_onto_video(video_path, combined_audio, seg_out, video_duration)
         combined_audio.unlink(missing_ok=True)
