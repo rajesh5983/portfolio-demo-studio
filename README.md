@@ -184,6 +184,69 @@ Segment can be specified by filename stem (`03_fairdesk`), label
 Once recordings land in `assets/recordings/`, run `generate_audio.py` and
 `compose_video.py` as normal (steps 2 and 4 in [Workflow](#workflow)).
 
+## Video Optimisation + Voiceover Pipeline
+
+After recordings are complete, this pipeline audits each MP4 for lag frames
+and silence gaps, generates timestamped VO cue cards with Claude, and pushes
+approved cues to ElevenLabs.
+
+### Full pipeline (correct order)
+
+**Step 1 — Record segments** (see [Automated Demo Recording](#automated-demo-recording)):
+
+```powershell
+python engine/run_demo.py --project workershield
+```
+
+**Step 2 — Audit recordings** (no video modification yet):
+
+```powershell
+python engine/run_audit_batch.py --project workershield --no-trim
+```
+
+Review `projects/workershield/audit/consolidated_audit.json`. Re-record any
+`RERECORD` segments before continuing:
+
+```powershell
+python engine/rerecord_segment.py --project workershield --segment {id} --warmup
+```
+
+**Step 3 — Optimise (trim lag frames):**
+
+```powershell
+python engine/run_audit_batch.py --project workershield
+```
+
+Trimmed files land in `projects/workershield/assets/recordings_optimised/`.
+Original recordings are untouched.
+
+**Step 4 — Generate VO cue card scripts:**
+
+```powershell
+python engine/generate_vo_scripts.py --project workershield
+```
+
+Edit each `projects/workershield/vo_scripts/{segment}_vo_script.yaml` and set
+`approved: yes` on every cue you want to use.
+
+**Step 5 — Dry-run then push to ElevenLabs:**
+
+```powershell
+python engine/batch_push_audio.py --project workershield --dry-run
+python engine/batch_push_audio.py --project workershield
+```
+
+Dry run prints total character count and estimated credit cost. The real run
+skips cues already on disk — safe to re-run after interruption.
+
+**Step 6 — Compose final video:**
+
+```powershell
+python engine/compose_video.py --project workershield
+```
+
+---
+
 ## Adding a new project
 
 1. Copy the `projects/workershield/` directory to `projects/<new_project>/`
@@ -204,7 +267,11 @@ portfolio-demo-studio/
 │   ├── rerecord_segment.py    # re-record a single segment by name/id
 │   ├── obs_controller.py      # OBS WebSocket v5 wrapper
 │   ├── preflight.py           # pre-flight readiness checks (Gradio, Qdrant, OBS, Phoenix, RAGAS)
-│   ├── generate_audio.py      # ElevenLabs TTS -> per-segment MP3s
+│   ├── video_auditor.py       # OpenCV lag/scene/silence detector -> AuditReport dict
+│   ├── run_audit_batch.py     # batch auditor + optional ffmpeg trim
+│   ├── generate_vo_scripts.py # Claude -> timestamped VO cue card YAML
+│   ├── batch_push_audio.py    # ElevenLabs batch push with dry-run cost estimate
+│   ├── generate_audio.py      # ElevenLabs TTS -> per-segment MP3s (simple path)
 │   ├── compose_video.py       # ffmpeg overlay + concat -> final MP4
 │   ├── generate_script.py     # Claude -> script.yaml
 │   ├── test_obs.py            # smoke test OBS WebSocket connection
@@ -218,9 +285,12 @@ portfolio-demo-studio/
 ├── projects/
 │   └── <project>/
 │       ├── script.yaml
+│       ├── audit/             # generated audit JSON reports
+│       ├── vo_scripts/        # Claude-generated VO cue card YAML files
 │       └── assets/
-│           ├── recordings/   # raw screen recordings (gitignored)
-│           └── audio/        # generated narration MP3s (gitignored)
+│           ├── recordings/              # raw screen recordings (gitignored)
+│           ├── recordings_optimised/    # lag-trimmed copies (gitignored)
+│           └── audio/                  # generated narration MP3s (gitignored)
 └── output/                    # final composed MP4s (gitignored)
 ```
 

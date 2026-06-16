@@ -1,0 +1,69 @@
+{
+  "filename": "06_phoenix.mp4",
+  "duration_sec": 49.23,
+  "fps": 60.0,
+  "resolution": "1920x1080",
+  "lag_segments": [
+    {
+      "start_sec": 0.25,
+      "end_sec": 5.75,
+      "duration_sec": 5.5,
+      "type": "lag"
+    },
+    {
+      "start_sec": 5.75,
+      "end_sec": 11.25,
+      "duration_sec": 5.5,
+      "type": "lag"
+    },
+    {
+      "start_sec": 11.5,
+      "end_sec": 49.0,
+      "duration_sec": 37.5,
+      "type": "lag"
+    }
+  ],
+  "scene_cuts": [],
+  "silence_gaps": [
+    {
+      "start_sec": 0.25,
+      "end_sec": 49.0,
+      "duration_sec": 48.75,
+      "type": "silence"
+    }
+  ],
+  "vo_cues": [
+    {
+      "time_sec": 0.0,
+      "time_fmt": "00:00",
+      "type": "intro",
+      "label": "Opening \u2014 set context before action starts"
+    },
+    {
+      "time_sec": 6.75,
+      "time_fmt": "00:06",
+      "type": "post_lag",
+      "label": "Demo resumed \u2014 explain what just loaded"
+    },
+    {
+      "time_sec": 12.25,
+      "time_fmt": "00:12",
+      "type": "post_lag",
+      "label": "Demo resumed \u2014 explain what just loaded"
+    },
+    {
+      "time_sec": 49.23,
+      "time_fmt": "00:49",
+      "type": "post_lag",
+      "label": "Demo resumed \u2014 explain what just loaded"
+    }
+  ],
+  "summary": {
+    "total_lag_sec": 48.5,
+    "lag_count": 3,
+    "scene_cut_count": 0,
+    "silence_count": 1,
+    "total_silence_sec": 48.75,
+    "recommended_action": "TRIM"
+  }
+}

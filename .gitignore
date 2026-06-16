@@ -12,6 +12,7 @@
 
 # OBS recordings and generated audio (directory structure kept via .gitkeep)
 projects/*/assets/recordings/*
+projects/*/assets/recordings_optimised/*
 projects/*/assets/audio/*
 
 # Output folder contents (folder kept via .gitkeep)

@@ -1,0 +1,45 @@
+{
+  "filename": "08_mcp_wrap.mp4",
+  "duration_sec": 79.97,
+  "fps": 60.0,
+  "resolution": "1920x1080",
+  "lag_segments": [
+    {
+      "start_sec": 0.25,
+      "end_sec": 79.75,
+      "duration_sec": 79.5,
+      "type": "lag"
+    }
+  ],
+  "scene_cuts": [],
+  "silence_gaps": [
+    {
+      "start_sec": 0.25,
+      "end_sec": 79.75,
+      "duration_sec": 79.5,
+      "type": "silence"
+    }
+  ],
+  "vo_cues": [
+    {
+      "time_sec": 0.0,
+      "time_fmt": "00:00",
+      "type": "intro",
+      "label": "Opening \u2014 set context before action starts"
+    },
+    {
+      "time_sec": 79.97,
+      "time_fmt": "01:19",
+      "type": "post_lag",
+      "label": "Demo resumed \u2014 explain what just loaded"
+    }
+  ],
+  "summary": {
+    "total_lag_sec": 79.5,
+    "lag_count": 1,
+    "scene_cut_count": 0,
+    "silence_count": 1,
+    "total_silence_sec": 79.5,
+    "recommended_action": "TRIM"
+  }
+}
